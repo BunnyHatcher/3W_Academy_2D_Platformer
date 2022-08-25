@@ -41,15 +41,31 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // character rotates by 180 degrees if he walks to the left (= less than zero velocity on the x axis)
+        if (_rb2d.velocity.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
+        }
+        // character rotates back if he walks towards the right 
+        if (_rb2d.velocity.x > 0)
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        }
+
         _direction.x = Input.GetAxisRaw("Horizontal") * _moveSpeed;
 
         //triggering Jump ability when pressing Spacebar
         if(Input.GetButtonDown("Jump") && _nbJump < _maxJump)
         {
             _isJumping = true;
+            _animator.SetBool("isJumping", true);
         }
 
-        _animator.SetFloat("MoveSpeedX", Mathf.Abs( _direction.x));
+
+        _animator.SetFloat("MoveSpeedX", Mathf.Abs( _direction.x));//use Mathf.Abs to use negative direction values for movement
+        _animator.SetFloat("MoveSpeedY", _rb2d.velocity.y);
+        
+
     }
 
     private void FixedUpdate()
@@ -66,11 +82,14 @@ public class PlayerMovement : MonoBehaviour
         if (_rb2d.velocity.y < 0)
         {
             _rb2d.gravityScale = _fallMultiplier;
+            _animator.SetBool("isJumping", false);
+            _animator.SetBool("isFalling", true);
         }
 
         else
         {
             _rb2d.gravityScale = 1f;
+            _animator.SetBool("isFalling", false);
         }
         
         _rb2d.velocity = _direction;
