@@ -41,18 +41,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        _direction.x = Input.GetAxisRaw("Horizontal") * _moveSpeed;
+
         // character rotates by 180 degrees if he walks to the left (= less than zero velocity on the x axis)
-        if (_rb2d.velocity.x < 0)
+        if (_direction.x < 0)
         {
             transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
         }
         // character rotates back if he walks towards the right 
-        if (_rb2d.velocity.x > 0)
+        else if (_direction.x > 0)
         {
             transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
         }
 
-        _direction.x = Input.GetAxisRaw("Horizontal") * _moveSpeed;
 
         //triggering Jump ability when pressing Spacebar
         if(Input.GetButtonDown("Jump") && _nbJump < _maxJump)
