@@ -644,7 +644,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8457354352828404892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,6 +657,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21741f5a01e069c4cb4ca12ad1207e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveSpeed: 10
+  _jumpForce: 500
+  _maxJump: 2
+  _fallMultiplier: 3
+  _graphics: {fileID: 2544632724222144961}
+  _floorMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _detectorRadius: 0.2
+  _detectorPosition: {x: 0.2, y: -1.14}
 --- !u!1 &2544632726126121825
 GameObject:
   m_ObjectHideFlags: 0

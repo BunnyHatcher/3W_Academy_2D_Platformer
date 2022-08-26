@@ -48,7 +48,27 @@ public class PlayerMovement : MonoBehaviour
     {
         //Horizontal movement
         _direction.x = Input.GetAxisRaw("Horizontal") * _moveSpeed;
+        FlipPlayer();
 
+
+        //triggering Jump ability when pressing Spacebar
+        if (Input.GetButtonDown("Jump") && _nbJump < _maxJump)
+        {
+            _isJumping = true;
+            _animator.SetBool("isJumping", true);
+        }
+
+
+        _animator.SetFloat("MoveSpeedX", Mathf.Abs(_direction.x));//use Mathf.Abs to use negative direction values for movement
+        _animator.SetFloat("MoveSpeedY", _rb2d.velocity.y);
+
+        // new method to detect if player touched floor
+        FloorDetection();
+
+    }
+
+    private void FlipPlayer()
+    {
         // character rotates by 180 degrees if he walks to the left (= less than zero velocity on the x axis)
         if (_direction.x < 0)
         {
@@ -59,26 +79,15 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
         }
+    }
 
+    private void FloorDetection()
+    {
+        Vector2 finalPosition = new Vector2(_detectorPosition.x + transform.position.x, _detectorPosition.y + transform.position.y);
 
-        //triggering Jump ability when pressing Spacebar
-        if(Input.GetButtonDown("Jump") && _nbJump < _maxJump)
-        {
-            _isJumping = true;
-            _animator.SetBool("isJumping", true);
-        }
-
-
-        _animator.SetFloat("MoveSpeedX", Mathf.Abs( _direction.x));//use Mathf.Abs to use negative direction values for movement
-        _animator.SetFloat("MoveSpeedY", _rb2d.velocity.y);
-
-        // new method to detect if player touched floor
-
-        Vector2 finalPosition = new Vector2 (_detectorPosition.x + transform.position.x, _detectorPosition.y + transform.position.y);
-        
         Collider2D floorCollider = Physics2D.OverlapCircle(finalPosition, _detectorRadius, _floorMask);
 
-        if(floorCollider != null)
+        if (floorCollider != null)
         {
             Debug.Log(floorCollider.tag);
             Debug.Log("Touched the floor");
@@ -89,7 +98,6 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("Didn't touch the floor");
         }
-
     }
 
     private void FixedUpdate()
