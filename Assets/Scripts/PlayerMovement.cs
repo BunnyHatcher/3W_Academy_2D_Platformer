@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _direction;
     private bool _isJumping = false;
     private int _nbJump = 0;
+    private bool _isGrounded = false;
 
     private Animator _animator;
 
@@ -83,20 +84,30 @@ public class PlayerMovement : MonoBehaviour
 
     private void FloorDetection()
     {
+        // line of code aiming to enable positioning the floor detection gizmo manually
         Vector2 finalPosition = new Vector2(_detectorPosition.x + transform.position.x, _detectorPosition.y + transform.position.y);
 
         Collider2D floorCollider = Physics2D.OverlapCircle(finalPosition, _detectorRadius, _floorMask);
 
         if (floorCollider != null)
         {
-            Debug.Log(floorCollider.tag);
-            Debug.Log("Touched the floor");
+           // Debug.Log(floorCollider.tag);
+            //Debug.Log("Touched the floor");
+
+            _isGrounded = true;
             _nbJump = 0;
 
+            //If player touches platform, they will move with the platform
+            if (floorCollider.CompareTag("Platform"))
+            {
+                transform.SetParent(floorCollider.transform);
+            }
         }
+        
         else
         {
-            Debug.Log("Didn't touch the floor");
+            //Debug.Log("Didn't touch the floor");
+            transform.SetParent(null);
         }
     }
 
