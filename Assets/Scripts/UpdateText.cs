@@ -12,6 +12,11 @@ public class UpdateText : MonoBehaviour
         _label = GetComponent<TextMeshProUGUI>();
     }
 
+    private void Update()
+    {
+        _label.text = _beersCollected.m_value.ToString();
+    }
+
 
 
     private TextMeshProUGUI _label;
